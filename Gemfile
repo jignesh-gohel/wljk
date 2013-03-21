@@ -5,7 +5,28 @@ gem 'rails', '3.2.9'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+#To fix the warning: SECURITY WARNING: No secret option provided to Rack::Session::Cookie
+# when server is started.
+# Fix References:
+#   1) https://makandracards.com/makandra/13580-fix-warning-no-secret-option-provided-to-rack-session-cookie
+#   2) http://stackoverflow.com/questions/14191053/error-security-warning-no-secret-option-provided-to-racksessioncookie
+gem 'rack', '1.4.1'
+
+gem 'rails_config'
+
+gem "haml", ">= 3.1.5"
+gem "haml-rails", ">= 0.3.4"
+
+gem 'devise', "2.1.2"
+gem 'mysql2', '~> 0.3.11'
+
+group :development do
+  gem 'sqlite3'
+end
+
+group :production do
+  gem 'pg'
+end
 
 
 # Gems used only for assets and not required

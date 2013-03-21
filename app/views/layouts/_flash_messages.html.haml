@@ -1,0 +1,12 @@
+.flash_messages_container
+  - flash.each do |name, message|
+    - css_class = ''
+    - case name
+      - when :error
+        - css_class = 'error'
+      - when :alert
+        - css_class = 'alert'
+      - when :notice
+        - css_class = 'notice'
+
+    %p{class: css_class}= message

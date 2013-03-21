@@ -34,4 +34,8 @@ Wljk::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Settings is available as part of 'rails_config' gem
+  config.action_mailer.default_url_options = { host: Settings.default_host }
+
 end

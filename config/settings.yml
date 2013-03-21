@@ -1,0 +1,3 @@
+app_name: "WLJK"
+
+default_host: <%= ENV['DEFAULT_HOST'] %>

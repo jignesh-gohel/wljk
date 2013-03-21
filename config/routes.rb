@@ -1,4 +1,18 @@
 Wljk::Application.routes.draw do
+  root to: 'users#welcome'
+
+  devise_for :users
+
+  devise_scope :user do
+    get "/signup" => "devise/registrations#new"
+    get "/signin" => "devise/sessions#new"
+    get "/signout" => "devise/sessions#destroy"
+  end
+
+  match "/home" => "users#index", as: :user_home
+
+  resources :users
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

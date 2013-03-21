@@ -16,3 +16,4 @@
 /config/database.yml
 /public/tmp/**/*
 /public/system/attachment/**/*
+.project
