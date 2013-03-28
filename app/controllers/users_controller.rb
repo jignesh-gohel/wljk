@@ -5,5 +5,6 @@ class UsersController < ApplicationController
   end
 
   def index
+    @home_active = true
   end
 end
