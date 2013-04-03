@@ -6,8 +6,8 @@
       - if user_signed_in?
         %li{ class: "#{@home_active ? 'active' : ''}" }
           =link_to "Home", user_home_path
-      %li
-        =link_to "Schedule Emails", "#"
+        %li{ class: "#{@schedule_emails_active ? 'active' : ''}" }
+          =link_to "Schedule Emails", mails_path
       %li
         =link_to "Link", "#"
 
