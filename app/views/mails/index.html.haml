@@ -12,12 +12,12 @@
   - hallo_rte_js = %w(jquery jquery-ui.min rangy-core hallo)
   - hallo_rte_additional_js = %w(jQuery.divPlaceholder)
   - app_required_js = %w(jquery_ujs bootstrap.min bootstrap-dropdown)
-  - other_js = %w(bootstrap-datetimepicker.min mail)
+  - other_js = %w(bootstrap-datetimepicker.min jquery.validate.min mail)
   - javascripts = hallo_rte_js + hallo_rte_additional_js + app_required_js + other_js
   - javascripts.each do |js|
     = javascript_include_tag(js)
 
-= form_tag('', class: 'form-horizontal') do
+= form_tag('', class: 'form-horizontal', id: 'scheduleMailForm') do
   .control-group
     -# Hallo JS doesn't work with content under <textarea> tag.Thus simulating a textarea using CSS.
     -# References:
@@ -26,6 +26,7 @@
     -#  3. http://stackoverflow.com/questions/8956567/how-do-i-make-an-editable-div-look-like-a-text-field
     -#  4. https://github.com/bergie/hallo#readme
     #textarea.richTextEditor.editable(data-placeholder='Write in your content, select text using mouse and format.')
+    = hidden_field_tag "mail_content"
 
   .control-group
     = text_area_tag('recipients', nil, rows: 5, class: 'input-xlarge', placeholder: "Input/Paste here recipients' email address" )
@@ -37,13 +38,14 @@
       -# 1. http://tarruda.github.com/bootstrap-datetimepicker/
       -# 2. http://www.eyecon.ro/bootstrap-datepicker/
       %div(id='mailScheduleDateTime' class='input-append date datetimepicker')
-        %input(data-format="dd/MM/yyyy hh:mm:ss" type="text" disabled='disabled')
+        -# Reference: http://stackoverflow.com/questions/3329961/jquery-can-i-validate-a-disabled-field
+        %input(data-format="dd/MM/yyyy hh:mm:ss" type="text" readonly="readonly" name='scheduleDateTime' class='required')
         %span.add-on
           %i(data-time-icon="icon-time" data-date-icon="icon-calendar")
 
   .control-group
     = label_tag('', class: 'checkbox') do
-      = check_box_tag('recurring_schedule_cbox')
+      = check_box_tag('recurring_schedule', 1, false, id: 'recurring_schedule_cbox')
       Recurring
 
   .control-group(style='display:none' id='recurringScheduleDetailsContainer')
@@ -53,3 +55,5 @@
       - options = options_for_select([ ['Days', 'days'], ['Months', 'months'], ['Years', 'years'] ], 'days')
       = select_tag('recurring_interval_type', options)
 
+  .control-group
+    = submit_tag('Save', class: 'btn btn-primary')
