@@ -25,15 +25,26 @@ jQuery(function() {
     }
   });
 
-  jQuery('#recurring_schedule_cbox').change(function() {
-    var checked = $(this).is(':checked');
-    var recurringScheduleDetailsContainer = $('#recurringScheduleDetailsContainer');
+  jQuery('#recurring_schedule_cbox').on("change", function(event) {
+    var checked = jQuery(event.target).is(':checked');
+    var recurringScheduleDetailsContainer = jQuery('#recurringScheduleDetailsContainer');
     if(checked) {
       recurringScheduleDetailsContainer.show();
     } else {
+      jQuery("#recurring_interval").val('');
+      jQuery("#recurring_interval_type").val('days');
+      recurringScheduleDetailsContainer.removeClass('success').removeClass('error');
+      recurringScheduleDetailsContainer.find('span.help-inline').remove();
       recurringScheduleDetailsContainer.hide();
     }
   });
+
+  var currentMailContent = jQuery("#currentMailContent");
+  if(currentMailContent.length > 0) {
+    // Reference: https://github.com/sprucemedia/jQuery.divPlaceholder.js#readme
+    // for trigger("change")
+    jQuery("#textarea").html(currentMailContent.html()).trigger("change");
+  }
 
   validateScheduleMailForm();
 
@@ -59,34 +70,45 @@ function addCustomMethodToFormValidationPlugin() {
   // Reference: http://stackoverflow.com/questions/13352626/dynamic-jquery-validate-error-messages-with-addmethod-based-on-the-element
   jQuery.validator.addMethod("emailList", function(value, element) {
     var validator = this;
-    var flag = true;
+    var validationPassed = true;
     var msg = '';
-    var recipients = value.split(',');
-    var invalidRecipients = new Array();
-    for (var cnt = 0; cnt < recipients.length; cnt++) {
-      var recipient = jQuery.trim(recipients[cnt]);
-      if(!emptyString(recipient) && !isEmail(recipient)) {
-        invalidRecipients.push(recipient);
-      }
-    }
 
-    var invalidRecipientsCnt = invalidRecipients.length
-    if (invalidRecipientsCnt > 0) {
-      flag =  false;
-      msg = 'Following recipients are invalid:'
-      for (var cnt = 0; cnt < invalidRecipientsCnt; cnt++) {
-        msg = msg.concat(invalidRecipients[cnt]);
-        if(cnt < invalidRecipientsCnt) {
-          msg = msg.concat(', ');
+    if (emptyString(value)) {
+      validationPassed = false;
+      msg = 'This field is required.'
+    } else {
+      var recipients = value.split(',');
+      var invalidRecipients = new Array();
+      for (var cnt = 0; cnt < recipients.length; cnt++) {
+        var recipient = jQuery.trim(recipients[cnt]);
+        if(!emptyString(recipient) && !isEmail(recipient)) {
+          invalidRecipients.push(recipient);
+        }
+      }
+
+      var invalidRecipientsCnt = invalidRecipients.length;
+      if (invalidRecipientsCnt > 0) {
+        validationPassed = false;
+        msg = 'Following recipients are invalid: ';
+        for (var cnt = 0; cnt < invalidRecipientsCnt; cnt++) {
+          if( (cnt > 0) && (cnt < invalidRecipientsCnt) ) {
+            msg = msg.concat(';  ');
+          }
+          msg = msg.concat(invalidRecipients[cnt]);
         }
       }
     }
 
-    if(!flag) {
+    if(!validationPassed) {
       jQuery(element).data('recipientsErrorMessage', msg);
-    }
 
-    return flag;
+      var parent = jQuery(element).closest('.control-group');
+
+      if (parent.hasClass('success')) {
+         parent.removeClass('success').addClass('error');
+       }
+    }
+    return validationPassed;
   }, function(params, element) {
     return jQuery(element).data('recipientsErrorMessage');
   });
@@ -98,7 +120,6 @@ function validateScheduleMailForm() {
     addCustomMethodToFormValidationPlugin();
 
     form.validate({
-      debug: true,
       // Reference: http://stackoverflow.com/questions/8466643/jquery-validate-enable-validation-for-hidden-fields
       ignore: ".ignore",
       rules: {
@@ -106,11 +127,11 @@ function validateScheduleMailForm() {
            required: {
              depends: function(element) {
                jqElement = jQuery(element);
-               var text = jQuery('#textarea').text();
+               var html = jQuery('#textarea').html();
                var flag = true;
-               if (!emptyString(text)) {
+               if (!emptyString(html)) {
                  flag = false;
-                 jqElement.val(text);
+                 jqElement.val(html);
                  jqElement.closest('.control-group').removeClass('error').addClass('success');
                } else {
                  jqElement.val('');
@@ -121,7 +142,6 @@ function validateScheduleMailForm() {
            }
         },
         recipients : {
-          required: true,
           emailList: true
         },
         recurring_interval: {
@@ -148,7 +168,8 @@ function validateScheduleMailForm() {
         errorElement.closest('.control-group').removeClass('error').addClass('success');
       },
       submitHandler: function(form) {
-
+        jQuery('#mail_content').val(jQuery('#textarea').html());
+        form.submit();
       }
     });
   }

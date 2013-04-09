@@ -1,3 +1,11 @@
+.table th {
+   text-align: center;
+}
+
+.table td {
+   text-align: center;
+}
+
 /*
  * Reference: http://stackoverflow.com/questions/8956567/how-do-i-make-an-editable-div-look-like-a-text-field
  * Added styles used by Twitter Bootstrap to make the DIV simulating a texarea look like a

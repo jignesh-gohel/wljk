@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  datetime: 2013-04-09 00:16:26
+  recurring: false
+  recurring_interval: 1
+  recurring_interval_type: MyString
+  mail_id: 1
+
+two:
+  datetime: 2013-04-09 00:16:26
+  recurring: false
+  recurring_interval: 1
+  recurring_interval_type: MyString
+  mail_id: 1

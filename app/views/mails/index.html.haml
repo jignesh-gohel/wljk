@@ -1,59 +1,40 @@
-%h2 Schedule an email!
-
 - content_for :additional_styles do
-  - hallo_rte_stylesheets = %w(jquery-ui.min font-awesome.min)
-  - hallo_rte_additional_stylesheets = %w(jQuery.divPlaceholder)
-  - other_stylesheets = %w(bootstrap-datetimepicker.min mail)
-  - stylesheets = hallo_rte_stylesheets + hallo_rte_additional_stylesheets + other_stylesheets
+  - stylesheets = %w(mail)
   - stylesheets.each do |ss|
     = stylesheet_link_tag(ss, media: "all")
 
-- content_for :additional_scripts do
-  - hallo_rte_js = %w(jquery jquery-ui.min rangy-core hallo)
-  - hallo_rte_additional_js = %w(jQuery.divPlaceholder)
-  - app_required_js = %w(jquery_ujs bootstrap.min bootstrap-dropdown)
-  - other_js = %w(bootstrap-datetimepicker.min jquery.validate.min mail)
-  - javascripts = hallo_rte_js + hallo_rte_additional_js + app_required_js + other_js
-  - javascripts.each do |js|
-    = javascript_include_tag(js)
+.container
+  %br/
+  = button_to('New Mail', new_mail_path, { form_class: 'form-inline', class: 'btn btn-primary', method: :get })
 
-= form_tag('', class: 'form-horizontal', id: 'scheduleMailForm') do
-  .control-group
-    -# Hallo JS doesn't work with content under <textarea> tag.Thus simulating a textarea using CSS.
-    -# References:
-    -#  1. http://stackoverflow.com/questions/10133783/how-can-i-change-cols-of-textarea-in-twitter-bootstrap
-    -#  2. https://github.com/sprucemedia/jQuery.divPlaceholder.js#readme
-    -#  3. http://stackoverflow.com/questions/8956567/how-do-i-make-an-editable-div-look-like-a-text-field
-    -#  4. https://github.com/bergie/hallo#readme
-    #textarea.richTextEditor.editable(data-placeholder='Write in your content, select text using mouse and format.')
-    = hidden_field_tag "mail_content"
+- if @existing_mails.present?
+  %table.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th Subject
+        %th Scheduled At
+        %th Recurring
+        %th Actions
 
-  .control-group
-    = text_area_tag('recipients', nil, rows: 5, class: 'input-xlarge', placeholder: "Input/Paste here recipients' email address" )
+    %tbody
+      - @existing_mails.each do |mail|
+        - mail_schedule = mail.mail_schedule
+        %tr
+          %td<
+            = link_to(mail.subject, mail_path(mail))
+          - if mail_schedule.present?
+            %td= mail_schedule.formatted_datetime
+            %td= mail_schedule.formatted_recurring_message
+          - else
+            %td= 'Not scheduled yet!'
+            %td= 'NA'
+          %td
+            %span<
+              = link_to(edit_mail_path(mail)) do
+                %i.icon-edit
+            %span(style='padding-left: 5px; padding-right: 5px;')<
+              |
+            %span<
+              = link_to(mail_path(mail), method: :delete, confirm: 'Are your sure?') do
+                %i.icon-remove
 
-  .control-group
-    = label_tag('Schedule Datetime')
-    .well
-      -# References:
-      -# 1. http://tarruda.github.com/bootstrap-datetimepicker/
-      -# 2. http://www.eyecon.ro/bootstrap-datepicker/
-      %div(id='mailScheduleDateTime' class='input-append date datetimepicker')
-        -# Reference: http://stackoverflow.com/questions/3329961/jquery-can-i-validate-a-disabled-field
-        %input(data-format="dd/MM/yyyy hh:mm:ss" type="text" readonly="readonly" name='scheduleDateTime' class='required')
-        %span.add-on
-          %i(data-time-icon="icon-time" data-date-icon="icon-calendar")
-
-  .control-group
-    = label_tag('', class: 'checkbox') do
-      = check_box_tag('recurring_schedule', 1, false, id: 'recurring_schedule_cbox')
-      Recurring
-
-  .control-group(style='display:none' id='recurringScheduleDetailsContainer')
-    .input-prepend
-      %span.add-on Every
-      = text_field_tag('recurring_interval', nil, class: 'span2 input-mini')
-      - options = options_for_select([ ['Days', 'days'], ['Months', 'months'], ['Years', 'years'] ], 'days')
-      = select_tag('recurring_interval_type', options)
-
-  .control-group
-    = submit_tag('Save', class: 'btn btn-primary')

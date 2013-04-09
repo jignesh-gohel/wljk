@@ -1,0 +1,95 @@
+- content_for :additional_styles do
+  - hallo_rte_stylesheets = %w(jquery-ui.min font-awesome.min)
+  - hallo_rte_additional_stylesheets = %w(jQuery.divPlaceholder)
+  - other_stylesheets = %w(bootstrap-datetimepicker.min mail)
+  - stylesheets = hallo_rte_stylesheets + hallo_rte_additional_stylesheets + other_stylesheets
+  - stylesheets.each do |ss|
+    = stylesheet_link_tag(ss, media: "all")
+
+- content_for :additional_scripts do
+  - hallo_rte_js = %w(jquery jquery-ui.min rangy-core hallo)
+  - hallo_rte_additional_js = %w(jQuery.divPlaceholder)
+  - app_required_js = %w(jquery_ujs bootstrap.min bootstrap-dropdown)
+  - other_js = %w(bootstrap-datetimepicker.min jquery.validate.min mail)
+  - javascripts = hallo_rte_js + hallo_rte_additional_js + app_required_js + other_js
+  - javascripts.each do |js|
+    = javascript_include_tag(js)
+
+- url = mails_path
+- action_method = :post
+- subject = nil
+- mail_content = nil
+- recipients_str = nil
+- schedule_datetime = nil
+- is_recurring_schedule = false
+- recurring_interval = nil
+- recurring_interval_type = 'days'
+
+- showRecurringDetailsContainer = false
+
+- if @mail.present?
+  - mail_obj = @mail
+  - url = mail_path(mail_obj)
+  - action_method = :put
+  - subject = mail_obj.subject
+  - mail_content = mail_obj.content
+  - recipients_str = mail_obj.recipients.collect { |recipient| recipient.email }.join(', ')
+  - mail_schedule = mail_obj.mail_schedule
+  - if mail_schedule.present?
+    - schedule_datetime_format = '%d/%m/%Y %H:%M:%S'
+    - schedule_datetime = mail_schedule.datetime.strftime(schedule_datetime_format)
+    - is_recurring_schedule = mail_schedule.recurring
+    - if is_recurring_schedule
+      - showRecurringDetailsContainer = true
+      - recurring_interval = mail_schedule.recurring_interval
+      - recurring_interval_type = mail_schedule.recurring_interval_type
+
+= form_tag(url, method: action_method, class: 'form-horizontal', id: 'scheduleMailForm') do
+  .control-group
+    = text_field_tag('subject', subject, class: 'input-xxlarge required', placeholder: 'Write in your mail subject here.')
+
+  .control-group
+    - if mail_content.present?
+      #currentMailContent(style='display:none;')
+        = mail_content.html_safe
+
+    -# Hallo JS doesn't work with content under <textarea> tag.Thus simulating a textarea using CSS.
+    -# References:
+    -#  1. http://stackoverflow.com/questions/10133783/how-can-i-change-cols-of-textarea-in-twitter-bootstrap
+    -#  2. https://github.com/sprucemedia/jQuery.divPlaceholder.js#readme
+    -#  3. http://stackoverflow.com/questions/8956567/how-do-i-make-an-editable-div-look-like-a-text-field
+    -#  4. https://github.com/bergie/hallo#readme
+    #textarea.richTextEditor.editable(data-placeholder='Write in your content, select text using mouse and format.')
+    = hidden_field_tag "mail_content"
+
+  .control-group
+    = text_area_tag('recipients', recipients_str, rows: 5, class: 'input-xlarge', placeholder: "Input/Paste here recipients' email address separated by comma." )
+
+  .control-group
+    = label_tag('Schedule Datetime')
+    .well
+      -# References:
+      -# 1. http://tarruda.github.com/bootstrap-datetimepicker/
+      -# 2. http://www.eyecon.ro/bootstrap-datepicker/
+      %div(id='mailScheduleDateTime' class='input-append date datetimepicker')
+        -# Reference: http://stackoverflow.com/questions/3329961/jquery-can-i-validate-a-disabled-field
+        -# Default value should be in the same format specified by data-format attribute, else
+        -# JS error: TypeError: this._date is null occurs.
+        %input{ :"data-format" => "dd/MM/yyyy hh:mm:ss", type: "text", readonly: "readonly", name: 'scheduleDateTime', class: 'required', value: schedule_datetime }
+        %span.add-on
+          %i(data-time-icon="icon-time" data-date-icon="icon-calendar")
+
+  .control-group
+    = label_tag('', class: 'checkbox') do
+      = check_box_tag('recurring_schedule', 1, is_recurring_schedule, id: 'recurring_schedule_cbox')
+      Recurring
+
+  .control-group{ style: "#{showRecurringDetailsContainer ? '' : 'display:none' }",  id: 'recurringScheduleDetailsContainer' }
+    .input-prepend
+      %span.add-on Every
+      = text_field_tag('recurring_interval', recurring_interval, class: 'span2 input-mini')
+      - options = options_for_select([ ['Days', 'days'], ['Months', 'months'], ['Years', 'years'] ], recurring_interval_type)
+      = select_tag('recurring_interval_type', options)
+
+  .control-group
+    = submit_tag('Save', class: 'btn btn-primary')
