@@ -2,6 +2,10 @@
 
 one:
   content: MyString
+  subject: MyString
+  user_id: 1
 
 two:
   content: MyString
+  subject: MyString
+  user_id: 1

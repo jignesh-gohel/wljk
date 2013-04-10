@@ -1,3 +1,25 @@
+/*
+ * https://github.com/twitter/bootstrap/issues/5012
+ * https://github.com/twitter/bootstrap/issues/1794
+ * https://github.com/twitter/bootstrap/issues/1543
+ * https://github.com/twitter/bootstrap/issues/1485
+ */
+input.btn {
+  vertical-align: baseline;
+  height: 28px;
+}
+
+button.btn {
+  vertical-align: baseline;
+}
+
+a.btn {
+  height: 19px;
+  padding-top: 3px;
+  vertical-align: baseline;
+}
+
+
 .table th {
    text-align: center;
 }

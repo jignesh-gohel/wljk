@@ -15,7 +15,7 @@
   - javascripts.each do |js|
     = javascript_include_tag(js)
 
-- url = mails_path
+- url = mail_templates_path
 - action_method = :post
 - subject = nil
 - mail_content = nil
@@ -27,14 +27,14 @@
 
 - showRecurringDetailsContainer = false
 
-- if @mail.present?
-  - mail_obj = @mail
-  - url = mail_path(mail_obj)
+- if @mail_template.present?
+  - mail_template_obj = @mail_template
+  - url = mail_template_path(mail_template_obj)
   - action_method = :put
-  - subject = mail_obj.subject
-  - mail_content = mail_obj.content
-  - recipients_str = mail_obj.recipients.collect { |recipient| recipient.email }.join(', ')
-  - mail_schedule = mail_obj.mail_schedule
+  - subject = mail_template_obj.subject
+  - mail_content = mail_template_obj.content
+  - recipients_str = mail_template_obj.recipients.collect { |recipient| recipient.email }.join(', ')
+  - mail_schedule = mail_template_obj.mail_schedule
   - if mail_schedule.present?
     - schedule_datetime_format = '%d/%m/%Y %H:%M:%S'
     - schedule_datetime = mail_schedule.datetime.strftime(schedule_datetime_format)
@@ -93,3 +93,5 @@
 
   .control-group
     = submit_tag('Save', class: 'btn btn-primary')
+    = link_to('Cancel', mail_templates_path, class: 'btn btn-primary')
+

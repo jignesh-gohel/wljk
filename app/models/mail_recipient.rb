@@ -1,6 +1,6 @@
 class MailRecipient < ActiveRecord::Base
-  attr_accessible :mail_id, :recipient_id
+  attr_accessible :mail_template_id, :recipient_id
 
-  belongs_to :mail
+  belongs_to :mail_template
   belongs_to :recipient
 end

@@ -5,7 +5,7 @@ class CreateMailSchedules < ActiveRecord::Migration
       t.boolean :recurring
       t.integer :recurring_interval
       t.string :recurring_interval_type
-      t.integer :mail_id
+      t.integer :mail_template_id
 
       t.timestamps
     end

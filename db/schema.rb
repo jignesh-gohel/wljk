@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130408194140) do
+ActiveRecord::Schema.define(:version => 20130410121854) do
 
   create_table "mail_recipients", :force => true do |t|
+    t.integer  "mail_template_id"
     t.integer  "recipient_id"
-    t.integer  "mail_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "mail_schedules", :force => true do |t|
@@ -25,17 +25,17 @@ ActiveRecord::Schema.define(:version => 20130408194140) do
     t.boolean  "recurring"
     t.integer  "recurring_interval"
     t.string   "recurring_interval_type"
-    t.integer  "mail_id"
+    t.integer  "mail_template_id"
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
   end
 
-  create_table "mails", :force => true do |t|
+  create_table "mail_templates", :force => true do |t|
     t.string   "content",    :limit => 2000
+    t.string   "subject"
+    t.integer  "user_id"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
-    t.integer  "user_id"
-    t.string   "subject"
   end
 
   create_table "recipients", :force => true do |t|

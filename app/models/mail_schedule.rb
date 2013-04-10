@@ -1,7 +1,7 @@
 class MailSchedule < ActiveRecord::Base
-  attr_accessible :datetime, :mail_id, :recurring, :recurring_interval, :recurring_interval_type
+  attr_accessible :datetime, :mail_template_id, :recurring, :recurring_interval, :recurring_interval_type
 
-  belongs_to :mail
+  belongs_to :mail_template
 
   def formatted_datetime
     return '' unless self.datetime.present?

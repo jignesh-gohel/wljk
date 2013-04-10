@@ -1,3 +1,15 @@
 app_name: "WLJK"
 
 default_host: <%= ENV['DEFAULT_HOST'] %>
+
+bulk_mails:
+  default:
+    from: 'no-reply@wljk.com'
+
+# Mail settings.
+mail:
+  address: <%= ENV['MAIL_ADDRESS'] %>
+  port: <%= ENV['MAIL_PORT'] %>
+  domain: <%= ENV['MAIL_DOMAIN'] %>
+  user_name: <%= ENV['MAIL_USER_NAME'] %>
+  password: <%= ENV['MAIL_PASSWORD'] %>

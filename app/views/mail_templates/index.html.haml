@@ -5,9 +5,9 @@
 
 .container
   %br/
-  = button_to('New Mail', new_mail_path, { form_class: 'form-inline', class: 'btn btn-primary', method: :get })
+  = button_to('New Mail Template', new_mail_template_path, { form_class: 'form-inline', class: 'btn btn-primary', method: :get })
 
-- if @existing_mails.present?
+- if @existing_mail_templates.present?
   %table.table.table-striped.table-bordered
     %thead
       %tr
@@ -17,11 +17,11 @@
         %th Actions
 
     %tbody
-      - @existing_mails.each do |mail|
-        - mail_schedule = mail.mail_schedule
+      - @existing_mail_templates.each do |mail_template|
+        - mail_schedule = mail_template.mail_schedule
         %tr
           %td<
-            = link_to(mail.subject, mail_path(mail))
+            = link_to(mail_template.subject, mail_template_path(mail_template))
           - if mail_schedule.present?
             %td= mail_schedule.formatted_datetime
             %td= mail_schedule.formatted_recurring_message
@@ -30,11 +30,11 @@
             %td= 'NA'
           %td
             %span<
-              = link_to(edit_mail_path(mail)) do
+              = link_to(edit_mail_template_path(mail_template)) do
                 %i.icon-edit
             %span(style='padding-left: 5px; padding-right: 5px;')<
               |
             %span<
-              = link_to(mail_path(mail), method: :delete, confirm: 'Are your sure?') do
+              = link_to(mail_template_path(mail_template), method: :delete, confirm: 'Are your sure?') do
                 %i.icon-remove
 

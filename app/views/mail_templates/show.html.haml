@@ -1,0 +1,29 @@
+.container
+  %br/
+  %dl.dl-horizontal
+    %dt= "Content"
+    %dd= @mail_template.content.html_safe
+
+    %br/
+
+    %dt= "Recipients"
+    %dd
+      %ul.unstyled
+        - @mail_template.recipients.each do |recipient|
+          %li= recipient.email
+
+    - mail_schedule = @mail_template.mail_schedule
+    - if mail_schedule.present?
+      %br/
+      %dt= "Scheduled At"
+      %dd= mail_schedule.formatted_datetime
+
+      - if mail_schedule.recurring
+        %br/
+        %dt= "Recurring"
+        %dd= mail_schedule.formatted_recurring_message
+
+  -#.span2.offset2
+  .form-actions
+    = link_to('Back', mail_templates_path, class: 'btn btn-primary')
+    = link_to('Edit', edit_mail_template_path(@mail_template), class: 'btn btn-primary')

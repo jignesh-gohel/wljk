@@ -68,4 +68,23 @@ Wljk::Application.configure do
   # Settings is available as part of 'rails_config' gem
   config.action_mailer.default_url_options = { host: Settings.default_host }
 
+  if Settings.try(:mail)
+    # Settings is available as part of 'rails_config' gem
+    config.action_mailer.default_url_options = { host: Settings.default_host }
+
+    config.action_mailer.smtp_settings = {
+      address:              Settings.mail.try(:address),
+      port:                 Settings.mail.try(:port),
+      domain:               Settings.mail.try(:domain),
+      user_name:            Settings.mail.try(:user_name),
+      password:             Settings.mail.try(:password),
+      authentication:       "plain",
+      enable_starttls_auto: true
+    }
+
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.delivery_method = :smtp
+  end
+
 end
