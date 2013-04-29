@@ -22,6 +22,11 @@ gem 'mysql2', '~> 0.3.11'
 
 gem "sidetiq", "~> 0.3.0"
 
+# https://github.com/mperham/sidekiq/wiki/Monitoring
+gem 'slim'
+# if you require 'sinatra' you get the DSL extended to Object
+gem 'sinatra', '>= 1.3.0', require: nil
+
 group :development do
   gem 'sqlite3'
 end

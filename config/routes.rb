@@ -1,3 +1,6 @@
+# https://github.com/mperham/sidekiq/wiki/Monitoring
+require 'sidekiq/web'
+
 Wljk::Application.routes.draw do
   root to: 'users#welcome'
 
@@ -7,6 +10,15 @@ Wljk::Application.routes.draw do
     get "/signup" => "devise/registrations#new"
     get "/signin" => "devise/sessions#new"
     get "/signout" => "devise/sessions#destroy"
+  end
+
+  # https://github.com/mperham/sidekiq/wiki/Monitoring
+  # TODO: Should be restricted to Admin users only.Currently in the application
+  # there is no concept of role neither Devise is configured to create Admin
+  # user.This should be done.
+  constraint = lambda { |request| request.env['warden'].authenticate!({ scope: :user }) }
+  constraints constraint do
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   match "/home" => "users#index", as: :user_home

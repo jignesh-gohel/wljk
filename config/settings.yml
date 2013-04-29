@@ -15,5 +15,7 @@ mail:
   password: <%= ENV['MAIL_PASSWORD'] %>
 
 redis:
-  url: <%= ENV['REDIS_SERVER_URL'] %>
+  # http://stackoverflow.com/questions/13770713/starting-sidekiq-on-heroku
+  # https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/redis_connection.rb#L29-L33
+  url: <%= ENV['REDIS_URL'] %>
   namespace: 'wljk'
