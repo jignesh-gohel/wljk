@@ -16,13 +16,38 @@ jQuery(function() {
         }
     });
 
-  datetTimePicker = jQuery('.datetimepicker').datetimepicker();
-  datetTimePicker.on('changeDate', function(e) {
-    var currentTargetParentContainer = jQuery(e.target).closest('.control-group');
+  var dateTimePicker = jQuery('.datetimepicker').datetimepicker();
+  dateTimePicker.on('changeDate', function(e) {
+    var eventTarget = jQuery(e.target);
+
+    var currentTargetParentContainer = eventTarget.closest('.control-group');
     if(currentTargetParentContainer.length > 0 && currentTargetParentContainer.hasClass('error')) {
       currentTargetParentContainer.removeClass('error').addClass('success');
       currentTargetParentContainer.find('span.help-inline').hide();
     }
+
+    var datetimeBox = eventTarget.find('input[name="scheduleDateTime"]');
+    if (datetimeBox.length > 0) {
+      var enableRecurringCbox = false;
+      if (!emptyString(datetimeBox.val())) {
+        enableRecurringCbox = true;
+      }
+
+      toggleRecurringCheckbox(enableRecurringCbox);
+    }
+
+  });
+
+  jQuery('#clearDateTime').on('click', function(event) {
+    jQuery('#mailScheduleDateTime input[name="scheduleDateTime"]').val('');
+    resetRecurringDetails();
+    toggleRecurringCheckbox(false);
+    if (jQuery(this).is(":visible")) {
+      jQuery(this).hide();
+    }
+    //toggleRecurringCheckbox(enableRecurringCbox);
+    // Reference: http://stackoverflow.com/questions/2857007/jquery-toggle-clicking-on-link-jumps-back-to-top-of-the-page
+    event.preventDefault();
   });
 
   jQuery('#recurring_schedule_cbox').on("change", function(event) {
@@ -31,11 +56,7 @@ jQuery(function() {
     if(checked) {
       recurringScheduleDetailsContainer.show();
     } else {
-      jQuery("#recurring_interval").val('');
-      jQuery("#recurring_interval_type").val('days');
-      recurringScheduleDetailsContainer.removeClass('success').removeClass('error');
-      recurringScheduleDetailsContainer.find('span.help-inline').remove();
-      recurringScheduleDetailsContainer.hide();
+      resetRecurringDetails();
     }
   });
 
@@ -49,6 +70,32 @@ jQuery(function() {
   validateScheduleMailForm();
 
 });
+
+function resetRecurringDetails() {
+  jQuery("#recurring_interval").val('');
+  jQuery("#recurring_interval_type").val('days');
+  var recurringScheduleDetailsContainer = jQuery('#recurringScheduleDetailsContainer');
+  recurringScheduleDetailsContainer.removeClass('success').removeClass('error');
+  recurringScheduleDetailsContainer.find('span.help-inline').remove();
+  recurringScheduleDetailsContainer.hide();
+}
+
+function toggleRecurringCheckbox(flag) {
+  var recurringCbox = jQuery('#recurring_schedule_cbox');
+  var clearDateTimeLink = jQuery('#clearDateTime');
+
+  if (flag) {
+    clearDateTimeLink.show();
+    recurringCbox.removeAttr('disabled');
+  } else {
+    clearDateTimeLink.hide();
+    recurringCbox.attr('disabled', 'disabled');
+    if(recurringCbox.is(":checked")) {
+      // Reference: http://stackoverflow.com/questions/4996953/how-to-uncheck-checkbox-using-jquery
+      recurringCbox.prop("checked", false);
+    }
+  }
+}
 
 function emptyString(string) {
   if((string == undefined) || (string == null) || (jQuery.trim(string) == '') ) {

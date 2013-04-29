@@ -20,6 +20,8 @@ gem "haml-rails", ">= 0.3.4"
 gem 'devise', "2.1.2"
 gem 'mysql2', '~> 0.3.11'
 
+gem "sidetiq", "~> 0.3.0"
+
 group :development do
   gem 'sqlite3'
 end

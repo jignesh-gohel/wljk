@@ -13,3 +13,7 @@ mail:
   domain: <%= ENV['MAIL_DOMAIN'] %>
   user_name: <%= ENV['MAIL_USER_NAME'] %>
   password: <%= ENV['MAIL_PASSWORD'] %>
+
+redis:
+  url: <%= ENV['REDIS_SERVER_URL'] %>
+  namespace: 'wljk'

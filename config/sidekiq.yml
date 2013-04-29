@@ -1,0 +1,11 @@
+# https://github.com/mperham/sidekiq/wiki/Logging
+# http://stackoverflow.com/questions/15260634/sidekiq-configuration-for-multiple-environments
+# http://stackoverflow.com/questions/16194562/sidekiq-worker-using-a-a-custom-queue-name-gets-assigned-to-default-queue
+# http://stackoverflow.com/questions/12683222/are-there-console-commands-to-look-at-whats-in-the-queue-and-to-clear-the-queue
+# https://github.com/mperham/sidekiq/wiki/API
+# https://github.com/mperham/sidekiq/issues/758
+---
+  :verbose: true
+  :pidfile: ./tmp/pids/sidekiq.pid
+  :logfile: ./log/sidekiq.log
+  :concurrency:  25

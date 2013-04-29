@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  next_occurrence: 2013-04-28 14:25:50
+  scheduled_entity_id: 1
+  occurrence_status: false
+
+two:
+  next_occurrence: 2013-04-28 14:25:50
+  scheduled_entity_id: 1
+  occurrence_status: false

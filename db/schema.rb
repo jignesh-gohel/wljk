@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130410121854) do
+ActiveRecord::Schema.define(:version => 20130428085550) do
 
   create_table "mail_recipients", :force => true do |t|
     t.integer  "mail_template_id"
@@ -42,6 +42,14 @@ ActiveRecord::Schema.define(:version => 20130410121854) do
     t.string   "email"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "schedule_occurrences", :force => true do |t|
+    t.datetime "next_occurrence"
+    t.integer  "scheduled_entity_id"
+    t.string   "occurrence_status"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   create_table "users", :force => true do |t|

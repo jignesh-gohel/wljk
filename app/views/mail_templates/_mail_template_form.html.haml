@@ -10,7 +10,7 @@
   - hallo_rte_js = %w(jquery jquery-ui.min rangy-core hallo)
   - hallo_rte_additional_js = %w(jQuery.divPlaceholder)
   - app_required_js = %w(jquery_ujs bootstrap.min bootstrap-dropdown)
-  - other_js = %w(bootstrap-datetimepicker.min jquery.validate.min mail)
+  - other_js = %w(date bootstrap-datetimepicker.min jquery.validate.min mail)
   - javascripts = hallo_rte_js + hallo_rte_additional_js + app_required_js + other_js
   - javascripts.each do |js|
     = javascript_include_tag(js)
@@ -23,7 +23,7 @@
 - schedule_datetime = nil
 - is_recurring_schedule = false
 - recurring_interval = nil
-- recurring_interval_type = 'days'
+- recurring_interval_type = 'hours'
 
 - showRecurringDetailsContainer = false
 
@@ -75,20 +75,26 @@
         -# Reference: http://stackoverflow.com/questions/3329961/jquery-can-i-validate-a-disabled-field
         -# Default value should be in the same format specified by data-format attribute, else
         -# JS error: TypeError: this._date is null occurs.
-        %input{ :"data-format" => "dd/MM/yyyy hh:mm:ss", type: "text", readonly: "readonly", name: 'scheduleDateTime', class: 'required', value: schedule_datetime }
+        = text_field_tag('scheduleDateTime', schedule_datetime, :"data-format" => "dd/MM/yyyy hh:mm:ss", readonly: "readonly")
         %span.add-on
           %i(data-time-icon="icon-time" data-date-icon="icon-calendar")
 
+      &nbsp;&nbsp;&nbsp;
+
+      %span{ id:'clearDateTime', style: "#{schedule_datetime.present? ? '' : 'display:none' }" }
+        = link_to('#') do
+          %i.icon-remove
+
   .control-group
     = label_tag('', class: 'checkbox') do
-      = check_box_tag('recurring_schedule', 1, is_recurring_schedule, id: 'recurring_schedule_cbox')
+      = check_box_tag('recurring_schedule', 1, is_recurring_schedule, id: 'recurring_schedule_cbox', disabled: !is_recurring_schedule)
       Recurring
 
   .control-group{ style: "#{showRecurringDetailsContainer ? '' : 'display:none' }",  id: 'recurringScheduleDetailsContainer' }
     .input-prepend
       %span.add-on Every
       = text_field_tag('recurring_interval', recurring_interval, class: 'span2 input-mini')
-      - options = options_for_select([ ['Days', 'days'], ['Months', 'months'], ['Years', 'years'] ], recurring_interval_type)
+      - options = options_for_select([ ['Minutes', 'minutes'], ['Hours', 'hours'], ['Days', 'days'], ['Months', 'months'], ['Years', 'years'] ], recurring_interval_type)
       = select_tag('recurring_interval_type', options)
 
   .control-group

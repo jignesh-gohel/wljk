@@ -9,3 +9,6 @@ mail:
   domain: 'gmail.com'
   user_name: 'demo.jig@gmail.com'
   password: 'Dem0Jiggi'
+
+redis:
+  url: "redis://127.0.0.1:6379"
