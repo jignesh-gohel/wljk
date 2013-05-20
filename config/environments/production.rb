@@ -49,7 +49,7 @@ Wljk::Application.configure do
 
   config.assets.precompile += %w( jquery-ui.min.css font-awesome.min.css jQuery.divPlaceholder.css bootstrap-datetimepicker.min.css mail.css )
   config.assets.precompile += %w( jquery.js jquery_ujs.js bootstrap.min.js bootstrap-dropdown.js )
-  config.assets.precompile += %w( jquery-ui.min.js rangy-core.js hallo.js jQuery.divPlaceholde.js date.js bootstrap-datetimepicker.min.js jquery.validate.min.js mail.js )
+  config.assets.precompile += %w( jquery-ui.min.js rangy-core.js hallo.js jQuery.divPlaceholder.js date.js bootstrap-datetimepicker.min.js jquery.validate.min.js mail.js )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
