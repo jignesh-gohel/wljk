@@ -46,7 +46,8 @@ Wljk::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( mail.css)
+  config.assets.precompile += %w( jquery-ui.min.css font-awesome.min.css jQuery.divPlaceholder.css bootstrap-datetimepicker.min.css mail.css )
+  config.assets.precompile += %w( jquery-ui.min.js rangy-core.js hallo.js jQuery.divPlaceholde.js date.js bootstrap-datetimepicker.min.js jquery.validate.min.js mail.js )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
